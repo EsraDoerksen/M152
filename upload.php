@@ -1,19 +1,27 @@
 <?php
 $message = "";
-$target_dir = "uploads/";
-$target_file = $target_dir . basename($_FILES["importedAudio"]["name"]);
 $uploadOk = 1;
-$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-// Check if image file is a actual image or fake image
+$audioEffect = $_POST['effect'];
+$filename = basename($_FILES["importedAudio"]["name"]);
+$newName = $_POST['newName'];
+
+$target_download = "downloads/";
+$target_file_download = $target_download . $newName;
+
+$target_upload = "uploads/";
+$target_file_upload = $target_upload . $filename;
+$imageFileType = strtolower(pathinfo($target_file_upload,PATHINFO_EXTENSION));
+
+// Überpürfung ob das Formular korrekt übergeben worden ist
 if(isset($_POST["submitAudio"])) {
     // Bereits bestehende Dateien werden geprüft
-    if (file_exists($target_file)) {
+    if (file_exists($target_file_upload)) {
         $message = "Sorry, file already exists.";
         $uploadOk = 0;
     }
   
     // Dateigrösse wird überprüft
-    if ($_FILES["importedAudio"]["size"] > 500000000) {
+    if ($_FILES["importedAudio"]["size"] > 3000000) {
         $message = "Sorry, your file is too large.";
         $uploadOk = 0;
     }
@@ -24,16 +32,26 @@ if(isset($_POST["submitAudio"])) {
         $uploadOk = 0;
     }
 
-    // Check if $uploadOk is set to 0 by an error
-    if ($uploadOk == 0) {
-    $message = "Sorry, your file was not uploaded.";
-    // if everything is ok, try to upload file
-    } else {
-        if (move_uploaded_file($_FILES["importedAudio"]["tmp_name"], $target_file)) {
+    // Hier wird geprüft, ob es einen Fehler mit der Datei gibt
+    if ($uploadOk == 1) {
+        if (move_uploaded_file($_FILES["importedAudio"]["tmp_name"], $target_file_upload)) {
             $message = "The file ". htmlspecialchars( basename( $_FILES["importedAudio"]["name"])). " has been uploaded.";
-        } else {
-            $message = "Sorry, there was an error uploading your file.";
         }
+    }
+
+    // Es wird geprüft, welcher radio Button ausgewählt worden ist(Echo, Fade In, Fade Out, Delay)
+    if($audioEffect == "Echo"){
+        // Entsprechendes Bash Script wird aufgerufen, 1. Parameter ist der Dateipfad und Dateiname und der 2. Parameter ist der neue Name der Audiodatei
+        exec('./addecho.sh $target_file_upload $newName');
+    }elseif($audioEffect == "Fade In"){
+        // Entsprechendes Bash Script wird aufgerufen, 1. Parameter ist der Dateipfad und Dateiname und der 2. Parameter ist der neue Name der Audiodatei
+        exec('./addfadein.sh $target_file_upload $newName');
+    }elseif ($audioEffect == "Fade Out") {
+        // Entsprechendes Bash Script wird aufgerufen, 1. Parameter ist der Dateipfad und Dateiname und der 2. Parameter ist der neue Name der Audiodatei
+        exec('./addfadeout.sh $target_file_upload $newName');
+    }elseif ($audioEffect == "Delay") {
+        // Entsprechendes Bash Script wird aufgerufen, 1. Parameter ist der Dateipfad und Dateiname und der 2. Parameter ist der neue Name der Audiodatei
+        exec('./adddelay.sh $target_file_upload $newName');
     }
 }
 ?>
@@ -53,30 +71,15 @@ if(isset($_POST["submitAudio"])) {
                 <h1 class="center">Equalizer for audio files</h1>
             </div>
             <hr> 
-            <h3 class="center"><?php echo $message ?></h3>
-            <br>
+            <div class="center alert alert-primary"><?php echo $message ?></div>
             <div>
-                <h5 class="center marginBottom3">Here is the area where you can change your audio file</h5>
+                <h5 class="center marginBottom3">Here is the area where you can download your audio file</h5>
             </div>
-            <form action="index.php" method="post" class="center">
-                <div>
-                    <p class="center marginBottom0">Add echo to the audio file:</p>
-                    <input class="center marginBottom3" type="checkbox" id="echo" name="echo"/>
-                </div>
-                <div>
-                    <p class="center marginBottom0">Add fade in to the audio file:</p>
-                    <input class="center marginBottom3" type="checkbox" id="fadeIn" name="fadeIn"/>
-                </div>
-                <div>
-                    <p class="center marginBottom0">Add fade out to the audio file:</p>
-                    <input class="center marginBottom3" type="checkbox" id="fadeOut" name="fadeOut"/>
-                </div>
-                <div>
-                    <p class="center marginBottom0">Add a delay to the audio file:</p>
-                    <input class="center marginBottom3" type="checkbox" id="delay" name="delay"/>
-                </div>
-                <button id="submitAudio" name="submitAudio" class="btn btn-dark">Edit your uploaded File</button>
-            </form>
+            <div>
+                <a href="<?php echo $target_file_download ?>" download role="button" class="btn btn-dark center smallButton">
+                    <p>Export new audio file</p>
+                </a>
+            </div>
         </div>
     </body>
 </html>

@@ -1,3 +1,4 @@
+/*Damit werden immer alle Elemente der Webseite in der Mitte angezeigt. Sowohl Text, als auch andere HTML-Elemente*/
 .center{
     text-align: center;
     margin-left: auto;
@@ -9,6 +10,15 @@
     margin-bottom: 3%;
 }
 
+.marginBottom1{
+    margin-bottom: 1%;
+}
+
 .marginBottom0{
     margin-bottom: 0%;
 }
+
+.smallButton{
+    width: 200px;
+}
+

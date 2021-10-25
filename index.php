@@ -1,12 +1,5 @@
 <?php
-$isEchoSet = isset($_POST['echo']);
-$isFadeInSet = isset($_POST['fadeIn']);
-$isFadeOutSet = isset($_POST['fadeOut']);
-$isDelaySet = isset($_POST['delay']);
-if(isset($_POST["submitAudio"])) {
-}
 ?>
-
 <!DOCTYPE html>
 <html lang="de">
     <head>
@@ -24,43 +17,34 @@ if(isset($_POST["submitAudio"])) {
             </div>
             <hr> 
             <div>
-                <h5 class="center marginBottom3">Here is the area where you can select your audio file</h5>
+                <h5 class="center marginBottom1">Here is the area where you can select and edit your audio file</h5>
             </div>
             <div>
                 <form action="upload.php" method="post" enctype="multipart/form-data" class="center">
-                    <input type="file" name="importedAudio" id="importedAudio" class="marginBottom3" accept=".">
+                    <input type="file" name="importedAudio" id="importedAudio" class="marginBottom1" accept=".mp3, .wav">
                     <br>
-                    <button id="submitAudio" name="submitAudio" class="btn btn-dark">Upload audio file</button>
+                    <div>
+                        <label class="center marginBottom0" for="echo">Echo</label>
+                        <input class="center" type="radio" id="echo" name="effect" value="Echo"/>
+                    </div>
+                    <div>
+                        <label class="center marginBottom0" for="fadeIn">Fade In</label>
+                        <input class="center" type="radio" id="fadeIn" name="effect" value="Fade In"/>
+                    </div>
+                    <div>
+                        <label class="center marginBottom0" for="fadeOut">Fade Out</label>
+                        <input class="center" type="radio" id="fadeOut" name="effect" value="Fade Out"/>
+                    </div>
+                    <div>
+                        <label class="center marginBottom0" for="delay">Delay</label>
+                        <input class="center marginBottom1" type="radio" id="delay" name="effect" value="Delay"/>
+                    </div>
+                    <div>
+                        <p class="center marginBottom0">Add a new name for the audio file:</p>
+                        <input class="center marginBottom3" type="text" id="newName" name="newName"/>
+                    </div>
+                    <button id="submitAudio" name="submitAudio" class="btn btn-dark">Upload and edit audio file</button>
                 </form>
-            </div>
-            <hr> 
-            <div>
-                <h5 class="center marginBottom3">Here is the area where you can change your audio file</h5>
-            </div>
-            <form method="post">
-                <div>
-                    <p class="center marginBottom0">Add echo to the audio file:</p>
-                    <input class="center marginBottom3" type="checkbox" id="echo" name="echo"/>
-                </div>
-                <div>
-                    <p class="center marginBottom0">Add fade in to the audio file:</p>
-                    <input class="center marginBottom3" type="checkbox" id="fadeIn" name="fadeIn"/>
-                </div>
-                <div>
-                    <p class="center marginBottom0">Add fade out to the audio file:</p>
-                    <input class="center marginBottom3" type="checkbox" id="fadeOut" name="fadeOut"/>
-                </div>
-                <div>
-                    <p class="center marginBottom0">Add a delay to the audio file:</p>
-                    <input class="center marginBottom3" type="checkbox" id="delay" name="delay"/>
-                </div>
-            </form>
-            <hr> 
-            <div>
-                <h5 class="center marginBottom3">Here is the area where you can download your audio file</h5>
-            </div>
-            <div>
-                <button class="center btn btn-dark">Export new audio file</button>
             </div>
         </div>
     </body>
